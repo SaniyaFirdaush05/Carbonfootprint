@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO Meta Tags -->
+  <title>EcoAI - Track, Understand & Reduce Your Carbon Footprint</title>
+  <meta name="description" content="Use EcoAI to track transport, energy, food, shopping, and waste habits. Get personalized AI suggestions, voice command entry, and live carbon metrics.">
+  <meta name="keywords" content="carbon footprint tracker, carbon score, eco assistant, conversational AI, sustainability, green living, track emissions">
+  <meta name="author" content="EcoAI Team">
+  
+  <!-- Favicon / Styling Link -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="logo-container">
+      <!-- Leaf Logo SVG -->
+      <svg class="logo-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 9a3 3 0 100 6 3 3 0 000-6z"></path>
+      </svg>
+      <div class="logo-text">
+        EcoAI <span class="logo-tag">Beta</span>
+      </div>
+    </div>
+    
+    <div class="header-actions">
+      <!-- Cumulative Savings Meter -->
+      <div class="savings-badge" id="cumulativeSavingsBadge" title="Cumulative carbon emissions saved through your active goals.">
+        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+        </svg>
+        <span>Saved: <strong id="savingsValue">0.0</strong> kg CO₂/mo</span>
+      </div>
+      
+      <!-- Settings Icon -->
+      <button class="btn-icon" id="openSettingsBtn" aria-label="Settings and Gemini API Key configuration">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- App Body Container -->
+  <main class="app-container">
+    
+    <!-- Left Dashboard Column -->
+    <section class="dashboard-grid">
+      
+      <!-- Top Row: Carbon Score Gauge & Category Chart -->
+      <div class="dashboard-row-top">
+        
+        <!-- Score Circular Gauge Card -->
+        <div class="glass-card score-card">
+          <h2 class="score-grade-label" style="font-size: 1rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1rem;">Daily Carbon Score</h2>
+          <div class="score-gauge-container">
+            <svg class="score-gauge-svg" viewBox="0 0 160 160">
+              <circle class="gauge-track" cx="80" cy="80" r="70"></circle>
+              <circle class="gauge-fill" id="scoreGaugeFill" cx="80" cy="80" r="70"></circle>
+            </svg>
+            <div class="gauge-text">
+              <span class="score-value" id="totalScoreValue">0.0</span>
+              <span class="score-unit">kg CO₂</span>
+            </div>
+          </div>
+          <div class="score-grade-badge" id="scoreGradeBadge">A+</div>
+          <p class="score-desc" id="scoreDescription">Calculating your daily footprint...</p>
+        </div>
+        
+        <!-- Breakdown Chart Card -->
+        <div class="glass-card chart-card">
+          <div class="card-header">
+            <h3 class="card-title">
+              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.003 9.003 0 1020.945 13H11V3.055z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
+              </svg>
+              Carbon Source Breakdown
+            </h3>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Target Limit: 5 kg/day</span>
+          </div>
+          
+          <div class="chart-wrapper">
+            <!-- SVG custom bar chart placeholders generated by app.js -->
+            <div class="chart-bar-container">
+              <div class="chart-bar-fill" id="bar-transport" style="background-color: var(--transport-color);" data-tooltip="0.0 kg"></div>
+              <span class="chart-bar-label">Transit</span>
+            </div>
+            <div class="chart-bar-container">
+              <div class="chart-bar-fill" id="bar-electricity" style="background-color: var(--electricity-color);" data-tooltip="0.0 kg"></div>
+              <span class="chart-bar-label">Power</span>
+            </div>
+            <div class="chart-bar-container">
+              <div class="chart-bar-fill" id="bar-food" style="background-color: var(--food-color);" data-tooltip="0.0 kg"></div>
+              <span class="chart-bar-label">Food</span>
+            </div>
+            <div class="chart-bar-container">
+              <div class="chart-bar-fill" id="bar-shopping" style="background-color: var(--shopping-color);" data-tooltip="0.0 kg"></div>
+              <span class="chart-bar-label">Shopping</span>
+            </div>
+            <div class="chart-bar-container">
+              <div class="chart-bar-fill" id="bar-waste" style="background-color: var(--waste-color);" data-tooltip="0.0 kg"></div>
+              <span class="chart-bar-label">Waste</span>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      
+      <!-- Category Badges Row -->
+      <div class="categories-row">
+        
+        <!-- Transport Badge -->
+        <div class="glass-card category-card" style="--category-color: var(--transport-color);">
+          <div class="cat-header">
+            <span>Transport</span>
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+            </svg>
+          </div>
+          <div class="cat-value" id="val-transport">0 km</div>
+          <div class="cat-co2">Emissions: <span id="co2-transport">0.00</span> kg</div>
+        </div>
+        
+        <!-- Electricity Badge -->
+        <div class="glass-card category-card" style="--category-color: var(--electricity-color);">
+          <div class="cat-header">
+            <span>Electricity</span>
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+          </div>
+          <div class="cat-value" id="val-electricity">0 kWh</div>
+          <div class="cat-co2">Emissions: <span id="co2-electricity">0.00</span> kg</div>
+        </div>
+        
+        <!-- Food Badge -->
+        <div class="glass-card category-card" style="--category-color: var(--food-color);">
+          <div class="cat-header">
+            <span>Food & Diet</span>
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3"></path>
+            </svg>
+          </div>
+          <div class="cat-value" id="val-food">0 meals</div>
+          <div class="cat-co2">Emissions: <span id="co2-food">0.00</span> kg</div>
+        </div>
+        
+        <!-- Shopping Badge -->
+        <div class="glass-card category-card" style="--category-color: var(--shopping-color);">
+          <div class="cat-header">
+            <span>Shopping</span>
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+            </svg>
+          </div>
+          <div class="cat-value" id="val-shopping">0 items</div>
+          <div class="cat-co2">Emissions: <span id="co2-shopping">0.00</span> kg</div>
+        </div>
+        
+        <!-- Waste Badge -->
+        <div class="glass-card category-card" style="--category-color: var(--waste-color);">
+          <div class="cat-header">
+            <span>Waste</span>
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+            </svg>
+          </div>
+          <div class="cat-value" id="val-waste">0 bags</div>
+          <div class="cat-co2">Emissions: <span id="co2-waste">0.00</span> kg</div>
+        </div>
+        
+      </div>
+      
+      <!-- Interactive Habit Logger Card -->
+      <div class="glass-card log-section-card">
+        <h2 style="font-size: 1.25rem; margin-bottom: 1.25rem; display:flex; align-items:center; gap:0.5rem;">
+          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+          </svg>
+          Quick Habit Logger
+        </h2>
+        
+        <!-- Tabs Header -->
+        <div class="tabs-header" role="tablist">
+          <button class="tab-btn active" data-tab="transport" role="tab" aria-selected="true">Transport</button>
+          <button class="tab-btn" data-tab="electricity" role="tab" aria-selected="false">Electricity</button>
+          <button class="tab-btn" data-tab="food" role="tab" aria-selected="false">Food</button>
+          <button class="tab-btn" data-tab="shopping" role="tab" aria-selected="false">Shopping</button>
+          <button class="tab-btn" data-tab="waste" role="tab" aria-selected="false">Waste</button>
+        </div>
+        
+        <!-- Forms Content -->
+        <!-- Transport Tab Form -->
+        <form class="log-form active" id="form-transport">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="trans-distance">Distance Traveled (km)</label>
+              <input class="form-input" type="number" id="trans-distance" min="0" max="1000" placeholder="e.g. 15" required>
+            </div>
+            <div class="form-group">
+              <label for="trans-type">Vehicle Type</label>
+              <select class="form-input" id="trans-type" required>
+                <option value="petrol_car">Petrol Car</option>
+                <option value="diesel_car">Diesel Car</option>
+                <option value="hybrid_car">Hybrid Car</option>
+                <option value="ev">Electric Vehicle (EV)</option>
+                <option value="motorcycle">Motorcycle</option>
+                <option value="bus">Public Bus</option>
+                <option value="metro">Metro / Subway</option>
+                <option value="train">Train</option>
+                <option value="walk">Walking / Foot</option>
+                <option value="bike">Bicycle</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn-primary">Update Transport Log</button>
+        </form>
+        
+        <!-- Electricity Tab Form -->
+        <form class="log-form" id="form-electricity">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="elec-kwh">Power Consumption (kWh)</label>
+              <input class="form-input" type="number" id="elec-kwh" min="0" max="500" placeholder="e.g. 10">
+              <div class="slider-value-container">
+                <span>Or use slider:</span>
+              </div>
+              <input type="range" id="elec-slider" min="0" max="3" step="1" value="0" class="form-input" style="padding:0.25rem 0;">
+              <div class="slider-value-container">
+                <span>Custom</span>
+                <span>Small (~4 kWh)</span>
+                <span>Medium (~10 kWh)</span>
+                <span>Large (~25 kWh)</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="elec-source">Electricity Grid Mix</label>
+              <select class="form-input" id="elec-source" required>
+                <option value="grid">Standard Grid Average</option>
+                <option value="green">100% Green Tariff / Solar</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn-primary">Update Electricity Log</button>
+        </form>
+        
+        <!-- Food Tab Form -->
+        <form class="log-form" id="form-food">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="food-meals">Number of Meals today</label>
+              <input class="form-input" type="number" id="food-meals" min="0" max="10" value="1" required>
+            </div>
+            <div class="form-group">
+              <label for="food-diet">Primary Dietary Type</label>
+              <select class="form-input" id="food-diet" required>
+                <option value="vegan">Vegan Meal (Fully plant-based)</option>
+                <option value="vegetarian">Vegetarian Meal (Dairy/Eggs, no meat)</option>
+                <option value="meat">Average Meat Meal (Chicken, pork, fish)</option>
+                <option value="beef">Beef-heavy Meal (High carbon impact)</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn-primary">Update Diet Log</button>
+        </form>
+        
+        <!-- Shopping Tab Form -->
+        <form class="log-form" id="form-shopping">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="shop-count">Number of Items Purchased</label>
+              <input class="form-input" type="number" id="shop-count" min="0" max="50" placeholder="e.g. 1" required>
+            </div>
+            <div class="form-group">
+              <label for="shop-type">Item Category</label>
+              <select class="form-input" id="shop-type" required>
+                <option value="clothing">Clothing & Apparel</option>
+                <option value="electronics">Electronics (Phones, Tech)</option>
+                <option value="furniture">Furniture & Homeware</option>
+                <option value="misc">Miscellaneous Items</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn-primary">Update Shopping Log</button>
+        </form>
+        
+        <!-- Waste Tab Form -->
+        <form class="log-form" id="form-waste">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="waste-bags">General Waste Bags (Standard 30L)</label>
+              <input class="form-input" type="number" id="waste-bags" min="0" max="20" placeholder="e.g. 1" required>
+            </div>
+            <div class="form-group">
+              <label for="waste-recycle">Household Recycling Rate</label>
+              <select class="form-input" id="waste-recycle" required>
+                <option value="recycle_low">Low Recycling (Most goes to landfill)</option>
+                <option value="recycle_medium">Moderate Recycling (Composting & sorting)</option>
+                <option value="recycle_high">High Recycling (Zero-waste focus)</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn-primary">Update Waste Log</button>
+        </form>
+      </div>
+    </section>
+    
+    <!-- Right Panel (EcoAI Conversational Chatbot & Goals List) -->
+    <aside class="side-panel">
+      
+      <!-- Conversational Chatbot Card -->
+      <div class="glass-card chat-card">
+        
+        <!-- Chat Header -->
+        <div class="chat-header">
+          <div class="chat-agent-info">
+            <div class="agent-avatar">
+              <!-- AI SVG Icon -->
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="agent-title">EcoAI Assistant</div>
+              <div class="agent-status" id="chatStatus">Online</div>
+            </div>
+          </div>
+          <button class="btn-icon" id="clearChatBtn" style="width:30px; height:30px;" title="Reset chat messages">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 7.89"></path>
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Messages Area -->
+        <div class="chat-messages" id="chatMessages" role="log" aria-live="polite">
+          <div class="message-bubble ai">
+            <p>Hi! I'm **EcoAI**, your smart carbon footprint assistant. 🍃</p>
+            <p>I can help you analyze your habits. You can type or **use the microphone button** below to talk to me!</p>
+            <p>For example, try saying: <br><em>"I took the metro 10km today and ate vegan."</em></p>
+          </div>
+        </div>
+        
+        <!-- Typist Loader Indicator -->
+        <div class="typing-indicator" id="typingLoader">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+        
+        <!-- Input Panel -->
+        <div class="chat-input-bar">
+          <!-- Voice Record Button -->
+          <button class="btn-voice" id="voiceRecordBtn" title="Speak to EcoAI (Voice input)" aria-label="Activate voice recognition">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+            </svg>
+          </button>
+          
+          <!-- Text Input -->
+          <input class="chat-input" id="chatInput" type="text" placeholder="Type a message or record voice..." aria-label="Chat input message">
+          
+          <!-- Send button -->
+          <button class="btn-send" id="sendChatBtn" aria-label="Send message">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+            </svg>
+          </button>
+        </div>
+        
+      </div>
+      
+      <!-- Personal Action Plan Card -->
+      <div class="glass-card goals-card">
+        <h3 style="font-size: 1.1rem; display: flex; align-items:center; gap:0.5rem;">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+          </svg>
+          My Active Goals
+        </h3>
+        
+        <div class="goals-list" id="goalsList">
+          <!-- Switch to LED Bulbs -->
+          <div class="goal-item" data-goal-id="led_bulbs">
+            <input type="checkbox" class="goal-checkbox" id="goal-led_bulbs">
+            <div class="goal-details">
+              <label class="goal-title" for="goal-led_bulbs">Switch to LED Bulbs</label>
+              <div class="goal-impact">Saves approx. 12 kg CO₂/mo</div>
+            </div>
+          </div>
+          
+          <!-- Metro Commuting -->
+          <div class="goal-item" data-goal-id="metro_commute">
+            <input type="checkbox" class="goal-checkbox" id="goal-metro_commute">
+            <div class="goal-details">
+              <label class="goal-title" for="goal-metro_commute">Metro commute 2x/week</label>
+              <div class="goal-impact">Saves approx. 20 kg CO₂/mo</div>
+            </div>
+          </div>
+          
+          <!-- Meatless Mondays -->
+          <div class="goal-item" data-goal-id="meatless_monday">
+            <input type="checkbox" class="goal-checkbox" id="goal-meatless_monday">
+            <div class="goal-details">
+              <label class="goal-title" for="goal-meatless_monday">Meatless Monday Diet</label>
+              <div class="goal-impact">Saves approx. 15 kg CO₂/mo</div>
+            </div>
+          </div>
+          
+          <!-- Compost & Recycling -->
+          <div class="goal-item" data-goal-id="max_recycling">
+            <input type="checkbox" class="goal-checkbox" id="goal-max_recycling">
+            <div class="goal-details">
+              <label class="goal-title" for="goal-max_recycling">Max Household Recycling</label>
+              <div class="goal-impact">Saves approx. 10 kg CO₂/mo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </aside>
+  </main>
+
+  <!-- Settings Configuration Modal -->
+  <div class="modal-overlay" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+    <div class="glass-card modal-content">
+      <div class="modal-header">
+        <h2 id="settingsModalTitle" style="font-size: 1.25rem;">Configuration & API Keys</h2>
+        <button class="modal-close" id="closeSettingsBtn" aria-label="Close settings">&times;</button>
+      </div>
+      
+      <p style="font-size: 0.85rem; color: var(--text-muted); line-height:1.4;">
+        Connect the tracker directly to **Google Gemini API** for personalized AI advice based on your current carbon logs. Your key is stored locally in your browser's private storage.
+      </p>
+      
+      <div class="form-group">
+        <label for="geminiApiKeyInput">Gemini API Key</label>
+        <input class="form-input" type="password" id="geminiApiKeyInput" placeholder="Paste your AIzaSy... API key here">
+      </div>
+      
+      <div class="form-group" style="margin-top: 0.5rem;">
+        <button class="btn-primary" id="saveSettingsBtn">Save Configuration</button>
+        <button class="btn-primary" id="clearSettingsBtn" style="background:transparent; border:1px solid var(--danger); color:var(--danger); margin-top:0.5rem; text-transform:none;">
+          Remove Saved API Key
+        </button>
+      </div>
+      
+      <div style="font-size:0.75rem; color: var(--text-muted); border-top:1px solid rgba(255,255,255,0.08); padding-top:0.75rem;">
+        *Note: If no API key is specified, the application automatically uses a robust offline NLP rules-engine to run locally.*
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div class="toast" id="toastBox" role="status">
+    <svg class="toast-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    </svg>
+    <span id="toastMessage">Log updated!</span>
+  </div>
+
+  <!-- Footprint Engine Scripts -->
+  <script src="calculator.js"></script>
+  <script src="ai.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
